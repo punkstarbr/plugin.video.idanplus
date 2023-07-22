@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import xbmc
 import time, datetime, random
 import resources.lib.common as common
@@ -61,6 +61,12 @@ def GetEPG(deltaInSec=86400):
 	epgList = common.GetUpdatedList(common.epgFile, epgURL, headers={'Referer': 'http://idan-{0}.Kodi-{1}.fish'.format(common.AddonVer, common.GetKodiVer())}, deltaInSec=deltaInSec, isZip=True)
 	return epgList if len(epgList) > 0 else {}
 
+# Translation of the user interface labels to Portuguese
+def SetPortugueseLabels():
+	common.addon.setLocalizedString(30001, "EPG")  # Replace 'EPG' with the Portuguese translation
+	common.addon.setLocalizedString(30002, "Programas Agora")  # Replace 'Now Programs' with the Portuguese translation
+	common.addon.setLocalizedString(30003, "Nenhum programa disponível.")  # Replace 'No program available.' with the Portuguese translation
+
 def Run(name, url, mode, iconimage='', moreData=''):
 	if mode == 2:
 		days = 2
@@ -76,4 +82,8 @@ def Run(name, url, mode, iconimage='', moreData=''):
 		ShowChannelEPG(url, name, iconimage, provider, days)
 	elif mode == 3:
 		GetEPG(deltaInSec=0)
-	common.SetViewMode('episodes')
+	common.SetViewMode('episodes')  # Replace 'episodes' with the appropriate view mode for the EPG in your skin
+	SetPortugueseLabels()  # Call the function to set Portuguese labels
+
+# Assuming you have a function that sets the view mode, replace 'episodes' with the appropriate view mode for the EPG in your skin.
+# For example, if your skin uses 'list' as the view mode, change this line to: common.SetViewMode('list')
