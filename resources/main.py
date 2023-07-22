@@ -7,8 +7,8 @@ import resources.lib.iptv as iptv
 import resources.lib.baseChannels as baseChannels
 
 if common.py2:
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
+	reload(sys)
+	sys.setdefaultencoding('utf-8')
 
 Addon = xbmcaddon.Addon(common.AddonID)
 AddonName = Addon.getAddonInfo("name")
@@ -17,59 +17,57 @@ imagesDir = common.imagesDir
 profileDir = common.profileDir
 favoritesFile = os.path.join(profileDir, 'favorites.json')
 if not os.path.isfile(favoritesFile):
-    common.WriteList(favoritesFile, [])
+	common.WriteList(favoritesFile, [])
 
 
 def GetCategoriesList():
-    name = common.GetLabelColor("Favoritos", bold=True, color="none")
-    common.addDir(name, '', 10, icon, infos={"Title": name}, addFav=False)
-    name = common.GetLabelColor("Pesquisar Programas", bold=True, color="none")
-    common.addDir(name, '', 4, icon, infos={"Title": name}, addFav=False)
-    name = common.GetLabelColor("TV", bold=True, color="none")
-    common.addDir(name, '', 1, icon, infos={"Title": name})
-    name = common.GetLabelColor("VOD (Vídeo sob Demanda)", bold=True, color="none")
-    common.addDir(name, '', 2, icon, infos={"Title": name})
-    name = common.GetLabelColor("Rádio", bold=True, color="none")
-    common.addDir(name, '', 3, icon, infos={"Title": name})
-    name = common.GetLabelColor("Programas de Rádio", bold=True, color="none")
-    common.addDir(name, '', 12, icon, infos={"Title": name})
-    name = common.GetLabelColor("Podcasts", bold=True, color="none")
-    common.addDir(name, '', 13, icon, infos={"Title": name})
-    name = common.GetLabelColor("Música", bold=True, color="none")
-    common.addDir(name, '', 14, icon, infos={"Title": name})
-    name = common.GetLabelColor("Configurações", bold=True, color="none")
-    common.addDir(name, 'Addon.OpenSettings', 6, icon, infos={"Title": name}, moreData=common.AddonID, isFolder=False)
-
+	name = common.GetLabelColor("מועדפי עידן פלוס", bold=True, color="none")
+	common.addDir(name, '', 10, icon, infos={"Title": name}, addFav=False)
+	name = common.GetLabelColor("חיפוש תכניות", bold=True, color="none")
+	common.addDir(name, '', 4, icon, infos={"Title": name}, addFav=False)
+	name = common.GetLabelColor("טלויזיה", bold=True, color="none")
+	common.addDir(name, '', 1, icon, infos={"Title": name})
+	name = common.GetLabelColor("VOD", bold=True, color="none")
+	common.addDir(name, '', 2, icon, infos={"Title": name})
+	name = common.GetLabelColor("רדיו", bold=True, color="none")
+	common.addDir(name, '', 3, icon, infos={"Title": name})
+	name = common.GetLabelColor("תכניות רדיו", bold=True, color="none")
+	common.addDir(name, '', 12, icon, infos={"Title": name})
+	name = common.GetLabelColor("פודקאסטים", bold=True, color="none")
+	common.addDir(name, '', 13, icon, infos={"Title": name})
+	name = common.GetLabelColor("מוזיקה", bold=True, color="none")
+	common.addDir(name, '', 14, icon, infos={"Title": name})
+	name = common.GetLabelColor("הגדרות", bold=True, color="none")
+	common.addDir(name, 'Addon.OpenSettings', 6, icon, infos={"Title": name}, moreData=common.AddonID, isFolder=False)
 
 def GetUserChannels(type='tv'):
-    userChannels = []
-    if type == 'tv':
-        channels = baseChannels.TvChannels
-    elif type == 'radio':
-        channels = baseChannels.RadioChannels
-    for channel in channels:
-        channel['index'] = common.GetIntSetting(channel['ch'], channel['index'])
-    channels = sorted(channels, key=lambda k: k['index'])
-    for channel in channels:
-        if channel['index'] != 0:
-            userChannels.append(channel)
-    userChannels = sorted(userChannels, key=lambda k: k['index'])
-    return userChannels
-
+	userChannels = []
+	if type == 'tv':
+		channels = baseChannels.TvChannels
+	elif type == 'radio':
+		channels = baseChannels.RadioChannels
+	for channel in channels:
+		channel['index'] = common.GetIntSetting(channel['ch'], channel['index'])
+	channels = sorted(channels, key=lambda k: k['index']) 
+	for channel in channels:
+		if channel['index'] != 0:
+			userChannels.append(channel)
+	userChannels = sorted(userChannels, key=lambda k: k['index'])
+	return userChannels
 
 def LiveChannels():
-    if common.GetAddonSetting("tvShortcut") == 'true':
-        name = common.GetLabelColor(common.GetLocaleString(30652), bold=True, color="none")
-        common.addDir(name, 'ActivateWindow', 6, icon, infos={"Title": name}, moreData='tvchannels', isFolder=False)
-    nowEPG = epg.GetNowEPG()
-    channels = GetUserChannels(type='tv')
-    for channel in channels:
-        if channel.get('type') == 'refresh':
-            name = common.GetLabelColor(common.GetLocaleString(channel['nameID']), bold=True, color="none")
-            common.addDir(name, 'Container.Refresh', channel['mode'], channel['image'], infos={"Title": name}, moreData=';noexit', isFolder=False)
-        else:
-            programs = [] if channel['tvgID'] == '' else nowEPG.get(channel['tvgID'], [])
-            LiveChannel(common.GetLocaleString(channel['nameID']), channel['channelID'], channel['mode'], channel['image'], channel['module'], contextMenu=[], resKey=channel['resKey'], programs=programs, tvgID=channel['tvgID'])
+	if common.GetAddonSetting("tvShortcut") == 'true':
+		name = common.GetLabelColor(common.GetLocaleString(30652), bold=True, color="none")
+		common.addDir(name, 'ActivateWindow', 6, icon, infos={"Title": name}, moreData='tvchannels', isFolder=False)
+	nowEPG = epg.GetNowEPG()
+	channels = GetUserChannels(type='tv')
+	for channel in channels:
+		if channel.get('type') == 'refresh': 
+			name = common.GetLabelColor(common.GetLocaleString(channel['nameID']), bold=True, color="none")
+			common.addDir(name, 'Container.Refresh', channel['mode'], channel['image'], infos={"Title": name}, moreData=';noexit', isFolder=False)
+		else:
+			programs = [] if channel['tvgID'] == '' else nowEPG.get(channel['tvgID'], [])
+			LiveChannel(common.GetLocaleString(channel['nameID']), channel['channelID'], channel['mode'], channel['image'], channel['module'], contextMenu=[], resKey=channel['resKey'], programs=programs, tvgID=channel['tvgID'])
 
 def LiveChannel(name, url, mode, iconimage, module, contextMenu=[], choose=True, resKey='', bitrate='', programs=[], tvgID='', addFav=True):
 	displayName = common.GetLabelColor(name, keyColor="chColor", bold=True)
